@@ -65,13 +65,25 @@ function App() {
         onClick={() => {
           const copy = [...postInfoList];
           copy.sort((a, b) => (a.title < b.title ? -1 : 1));
-          console.log(copy);
           setPostInfoList(copy);
         }}
       >
         가나다순정렬
       </button>
+
       <div>{postList}</div>
+
+      <Modal />
+    </div>
+  );
+}
+
+function Modal() {
+  return (
+    <div className="modal">
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
     </div>
   );
 }
