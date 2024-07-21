@@ -1,16 +1,29 @@
+import { useState } from "react";
 import "./App.css";
 
 function App() {
-  let post = "강남 우동 맛집";
-  // document.querySelector('h4').innerHTML = post;
-  // => html 상 h4를 태그를 찾아 innerHTML를 post로 변경한다.
+  let [logo, setLogo] = useState("ReactBlog"); // <- 로고글자도 state로 넣으면 좋아? 쓸데없음, state는 변동사항이 필요할때를 위한 문법
+
+  let [postTitles, setPostTitles] = useState([
+    "남자 코트 추천",
+    "강남 우동맛집",
+    "파이썬독학",
+  ]);
+
+  let postTitleList = postTitles.map((postTitle) => (
+    <div className="list">
+      <h4>{postTitle}</h4>
+      <p>2월 17일 발행</p>
+    </div>
+  ));
+
   return (
-    // js div 생성방법: React.createElement('div', null, 'Hello World')
     <div className="App">
       <div className="black-nav">
-        <h4 style={{ color: "white", fontSize: "16px" }}>블로그임</h4>
+        {/* <h4 style={{ color: "white", fontSize: "16px" }}>{logo}</h4> */}
+        <h4 style={{ color: "white", fontSize: "16px" }}>ReactBlog</h4>
       </div>
-      <h4 id={post}>{post}</h4>
+      <div>{postTitleList}</div>
     </div>
   );
 }
