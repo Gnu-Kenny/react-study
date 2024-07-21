@@ -11,6 +11,7 @@ function App() {
     { idx: 2, title: "파이썬독학", like: 0 },
   ]);
 
+  // 좋아요 클릭시 상태가 0,1로 변경되는 토글 함수
   const toggleLike = (idx) => {
     setPostInfoList(
       postInfoList.map((post) => {
@@ -20,6 +21,7 @@ function App() {
     );
   };
 
+  // 제목 변경 함수
   const changeTitle = (idx, newTitle) => {
     setPostInfoList(
       postInfoList.map((post) => {
@@ -33,13 +35,12 @@ function App() {
   let postList = postInfoList.map((props) => (
     <div className="list" key={props.idx}>
       <h4>
-        {props.title}
+        {props.title}{" "}
         <span
           onClick={() => {
             toggleLike(props.idx);
           }}
         >
-          {" "}
           👍🏻 {props.like}{" "}
         </span>
         <button
@@ -59,6 +60,17 @@ function App() {
       <div className="black-nav">
         <h4 style={{ color: "white", fontSize: "16px" }}>ReactBlog</h4>
       </div>
+
+      <button
+        onClick={() => {
+          const copy = [...postInfoList];
+          copy.sort((a, b) => (a.title < b.title ? -1 : 1));
+          console.log(copy);
+          setPostInfoList(copy);
+        }}
+      >
+        가나다순정렬
+      </button>
       <div>{postList}</div>
     </div>
   );
