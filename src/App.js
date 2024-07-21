@@ -11,6 +11,24 @@ function App() {
     { idx: 2, title: "파이썬독학", like: 0 },
   ]);
 
+  const toggleLike = (idx) => {
+    setPostInfoList(
+      postInfoList.map((post) => {
+        if (post.idx === idx) return { ...post, like: post.like === 0 ? 1 : 0 };
+        else return post;
+      })
+    );
+  };
+
+  const changeTitle = (idx, newTitle) => {
+    setPostInfoList(
+      postInfoList.map((post) => {
+        if (post.idx === idx) return { ...post, title: newTitle };
+        else return post;
+      })
+    );
+  };
+
   // 글 태그
   let postList = postInfoList.map((props) => (
     <div className="list" key={props.idx}>
@@ -18,15 +36,7 @@ function App() {
         {props.title}
         <span
           onClick={() => {
-            setPostInfoList(
-              postInfoList.map((post) =>
-                post.idx === props.idx // 변경 대상 글
-                  ? post.like === 0
-                    ? { ...post, like: 1 } // 현재 좋아요가 0 => 1
-                    : { ...post, like: 0 } // 현재 좋아요가 1 => 0
-                  : post
-              )
-            );
+            toggleLike(props.idx);
           }}
         >
           {" "}
@@ -34,13 +44,7 @@ function App() {
         </span>
         <button
           onClick={() => {
-            setPostInfoList(
-              postInfoList.map((post) =>
-                post.idx === props.idx
-                  ? { ...post, title: "여자 코트 추천" }
-                  : post
-              )
-            );
+            changeTitle(props.idx, "여자 코트 추천");
           }}
         >
           눌러보셈
