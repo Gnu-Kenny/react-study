@@ -1,23 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
 function App() {
+  let post = "강남 우동 맛집";
+  // document.querySelector('h4').innerHTML = post;
+  // => html 상 h4를 태그를 찾아 innerHTML를 post로 변경한다.
   return (
+    // js div 생성방법: React.createElement('div', null, 'Hello World')
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="black-nav">
+        <h4 style={{ color: "white", fontSize: "16px" }}>블로그임</h4>
+      </div>
+      <h4 id={post}>{post}</h4>
     </div>
   );
 }
