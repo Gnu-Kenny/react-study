@@ -5,66 +5,41 @@ import "./App.css";
 
 function App() {
   // 글 제목 state
-  let [postInfoList, setPostInfoList] = useState([
-    { idx: 0, title: "남자 코트 추천", like: 0 },
-    { idx: 1, title: "강남 우동맛집", like: 0 },
-    { idx: 2, title: "파이썬독학", like: 0 },
+  let [title, setTitle] = useState([
+    "남자 코트 추천",
+    "강남 우동맛집",
+    "파이썬독학",
   ]);
+
+  let [like, setLike] = useState([0, 0, 0]);
+
+  let [cursor, setCursor] = useState([false, false, false]);
 
   let [modal, setModal] = useState(false);
 
-  // 좋아요 클릭시 상태가 0,1로 변경되는 토글 함수
-  const toggleLike = (idx) => {
-    setPostInfoList(
-      postInfoList.map((post) => {
-        if (post.idx === idx) return { ...post, like: post.like === 0 ? 1 : 0 };
-        else return post;
-      })
-    );
+  // 좋아요 클릭시 개수가 1씩 증가
+  const sortPost = () => {
+    const copy = [...title];
+    copy.sort((a, b) => (a < b ? -1 : 1));
+    setTitle(copy);
   };
 
-  // 제목 변경 함수
-  const changeTitle = (idx, newTitle) => {
-    setPostInfoList(
-      postInfoList.map((post) => {
-        if (post.idx === idx) return { ...post, title: newTitle };
-        else return post;
-      })
-    );
+  // 좋아요 클릭시 개수가 1씩 증가
+  const countLike = (i) => {
+    let copy = [...like];
+    copy[i] += 1;
+    setLike(copy);
   };
 
-  const toggleModal = () => {
-    if (modal == true) setModal(false);
-    else setModal(true);
-  };
+  const findModalIndex = () => {
+    let id = 0;
 
-  // 글 태그
-  let postList = postInfoList.map((props) => (
-    <div className="list" key={props.idx}>
-      <h4
-        onClick={() => {
-          toggleModal();
-        }}
-      >
-        {props.title}{" "}
-        <span
-          onClick={() => {
-            toggleLike(props.idx);
-          }}
-        >
-          👍🏻 {props.like}{" "}
-        </span>
-        <button
-          onClick={() => {
-            changeTitle(props.idx, "여자 코트 추천");
-          }}
-        >
-          눌러보셈
-        </button>
-      </h4>
-      <p>2월 17일 발행</p>
-    </div>
-  ));
+    cursor.map((c, i) => {
+      c == true ? (id = i) : null;
+    });
+
+    return id;
+  };
 
   return (
     <div className="App">
@@ -74,27 +49,64 @@ function App() {
 
       <button
         onClick={() => {
-          const copy = [...postInfoList];
-          copy.sort((a, b) => (a.title < b.title ? -1 : 1));
-          setPostInfoList(copy);
+          sortPost();
         }}
       >
         가나다순정렬
       </button>
 
-      <div>{postList}</div>
+      {title.map((t, i) => {
+        return (
+          <div className="list" key={i}>
+            <h4
+              onClick={(e) => {
+                setModal(!modal);
 
-      {modal == true ? <Modal /> : null}
+                let copy = [...cursor];
+                if (!modal == true) {
+                  // 상세 페이지 열었을때
+                  copy = copy.map((c, i) =>
+                    i == e.target.id ? (c = true) : (c = false)
+                  );
+                } else {
+                  copy.map(() => {
+                    return false;
+                  });
+                }
+                setCursor(copy);
+              }}
+              id={i}
+            >
+              {t}
+              <span onClick={() => countLike(i)}> 👍🏻 {like[i]} </span>
+            </h4>
+            <p>2월 17일 발행</p>
+          </div>
+        );
+      })}
+
+      {modal == true ? (
+        <Modal title={title} setTitle={setTitle} idx={findModalIndex()} />
+      ) : null}
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
     <div className="modal">
-      <h4>제목</h4>
+      <h4>{props.title[props.idx]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      <button
+        onClick={() => {
+          let copy = [...props.title];
+          copy[props.idx] = "여자 코트 추천";
+          props.setTitle(copy);
+        }}
+      >
+        글수정
+      </button>
     </div>
   );
 }
