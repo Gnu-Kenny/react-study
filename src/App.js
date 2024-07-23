@@ -11,6 +11,8 @@ function App() {
     { idx: 2, title: "파이썬독학", like: 0 },
   ]);
 
+  let [modal, setModal] = useState(false);
+
   // 좋아요 클릭시 상태가 0,1로 변경되는 토글 함수
   const toggleLike = (idx) => {
     setPostInfoList(
@@ -31,10 +33,19 @@ function App() {
     );
   };
 
+  const toggleModal = () => {
+    if (modal == true) setModal(false);
+    else setModal(true);
+  };
+
   // 글 태그
   let postList = postInfoList.map((props) => (
     <div className="list" key={props.idx}>
-      <h4>
+      <h4
+        onClick={() => {
+          toggleModal();
+        }}
+      >
         {props.title}{" "}
         <span
           onClick={() => {
@@ -73,7 +84,7 @@ function App() {
 
       <div>{postList}</div>
 
-      <Modal />
+      {modal == true ? <Modal /> : null}
     </div>
   );
 }
