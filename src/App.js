@@ -17,11 +17,41 @@ function App() {
 
   let [modal, setModal] = useState(false);
 
+  let [inputText, setInputText] = useState("");
+
   // 좋아요 클릭시 개수가 1씩 증가
   const countLike = (i) => {
     let copy = [...like];
     copy[i] += 1;
     setLike(copy);
+  };
+
+  // 게시글 추가
+  const addPost = () => {
+    let copyTitle = [...title];
+    let copyLike = [...like];
+
+    copyTitle.push(inputText);
+    copyLike.push(0);
+
+    setTitle(copyTitle);
+    setLike(copyLike);
+  };
+
+  // 게시글 삭제
+  const deletePost = (idx) => {
+    let copyTitle = [...title];
+    let copyLike = [...like];
+
+    copyTitle = copyTitle.filter((v, i) => i != idx);
+    copyLike = copyLike.filter((v, i) => i != idx);
+
+    setTitle(copyTitle);
+    setLike(copyLike);
+
+    // 상세페이지 닫기
+    if (titleIdx == idx && modal == true) setModal(false);
+    if (copyTitle.length == 0) setModal(false);
   };
 
   return (
@@ -40,12 +70,38 @@ function App() {
               }}
             >
               {t}
-              <span onClick={() => countLike(i)}> 👍🏻 {like[i]} </span>
+              <span
+                onClick={(e) => {
+                  e.stopPropagation(); // 이벤트 버블링 방지
+                  countLike(i);
+                }}
+              >
+                {" "}
+                👍🏻 {like[i]}{" "}
+              </span>
+
+              <button
+                style={{ background: "white" }}
+                onClick={(e) => {
+                  e.stopPropagation(); // 이벤트 버블링 방지
+                  deletePost(i);
+                }}
+              >
+                {" "}
+                ❌{" "}
+              </button>
             </h4>
             <p>2월 17일 발행</p>
           </div>
         );
       })}
+
+      <input
+        onChange={(e) => {
+          setInputText(e.target.value);
+        }}
+      ></input>
+      <button onClick={() => addPost()}> 글 추가 </button>
 
       {modal == true ? (
         <Modal title={title} setTitle={setTitle} titleIdx={titleIdx} />
